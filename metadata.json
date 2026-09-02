@@ -1,0 +1,6 @@
+{
+  "name": "MathFlash",
+  "description": "Website kuis matematika kilat (mental math) dengan timer untuk siswa SMP/SMA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
