@@ -7,8 +7,17 @@ import { db } from "@/lib/firebase";
 import { doc, updateDoc, increment } from "firebase/firestore";
 import { motion, AnimatePresence } from "motion/react";
 import confetti from "canvas-confetti";
-import questionsData from "@/data/questions.json";
 import { Clock, X, Check, ArrowRight, Trophy } from "lucide-react";
+import trigonometriData from "@/data/trigonometri.json";
+import fungsiData from "@/data/fungsi.json";
+import aritmatikaData from "@/data/aritmatika.json";
+
+// Petakan nama topik (yang ada di URL) ke file JSON yang sesuai
+const questionBanks: Record<string, any[]> = {
+  "Trigonometri": trigonometriData,
+  "Fungsi Komposisi & Invers": fungsiData,
+  "Aritmatika Cepat": aritmatikaData,
+};
 
 interface Question {
   id: string;
@@ -38,8 +47,9 @@ export default function QuizPage({ params }: { params: Promise<{ topic: string }
   const scoreRef = useRef(0);
 
   useEffect(() => {
-    // Filter and shuffle questions
-    const topicQuestions = questionsData.filter(q => q.topic === decodedTopic);
+    // Ambil bank soal sesuai topik yang dipilih, jika tidak ada gunakan array kosong
+    const topicQuestions = questionBanks[decodedTopic] || [];
+    // Acak urutan soal dan ambil 15 soal pertama
     const shuffled = [...topicQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
     setQuestions(shuffled);
   }, [decodedTopic]);

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "arit-1",
+    "topic": "Aritmatika Cepat",
+    "question": "Berapakah 15 × 11?",
+    "options": ["155", "165", "175", "185"],
+    "correctAnswer": "165"
+  },
+  {
+    "id": "arit-2",
+    "topic": "Aritmatika Cepat",
+    "question": "Berapakah 25² (25 kuadrat)?",
+    "options": ["425", "525", "625", "725"],
+    "correctAnswer": "625"
+  },
+  {
+    "id": "arit-3",
+    "topic": "Aritmatika Cepat",
+    "question": "Hasil dari 120 ÷ 5 adalah...",
+    "options": ["20", "22", "24", "26"],
+    "correctAnswer": "24"
+  }
+]

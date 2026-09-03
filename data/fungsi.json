@@ -1,0 +1,23 @@
+[
+  {
+    "id": "func-1",
+    "topic": "Fungsi Komposisi & Invers",
+    "question": "Jika f(x) = x + 3, maka f⁻¹(x) = ...",
+    "options": ["x - 3", "3 - x", "3x", "x / 3"],
+    "correctAnswer": "x - 3"
+  },
+  {
+    "id": "func-2",
+    "topic": "Fungsi Komposisi & Invers",
+    "question": "Jika f(x) = 2x dan g(x) = x + 1, maka (f ∘ g)(x) = ...",
+    "options": ["2x + 1", "2x + 2", "x + 2", "3x"],
+    "correctAnswer": "2x + 2"
+  },
+  {
+    "id": "func-3",
+    "topic": "Fungsi Komposisi & Invers",
+    "question": "Jika f(x) = x - 5, berapakah nilai f⁻¹(2)?",
+    "options": ["-3", "3", "7", "10"],
+    "correctAnswer": "7"
+  }
+]

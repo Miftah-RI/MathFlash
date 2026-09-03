@@ -1,0 +1,23 @@
+[
+  {
+    "id": "trig-1",
+    "topic": "Trigonometri",
+    "question": "Nilai dari sin 30° adalah...",
+    "options": ["1/2", "√2/2", "√3/2", "1"],
+    "correctAnswer": "1/2"
+  },
+  {
+    "id": "trig-2",
+    "topic": "Trigonometri",
+    "question": "Nilai dari cos 60° adalah...",
+    "options": ["1/2", "√2/2", "√3/2", "1"],
+    "correctAnswer": "1/2"
+  },
+  {
+    "id": "trig-3",
+    "topic": "Trigonometri",
+    "question": "Berapa nilai tan 45°?",
+    "options": ["0", "1/2", "1", "tak hingga"],
+    "correctAnswer": "1"
+  }
+]
