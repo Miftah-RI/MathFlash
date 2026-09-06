@@ -10,8 +10,8 @@ import { auth } from "@/lib/firebase";
 const topics = [
   { id: "Trigonometri", title: "Trigonometri", icon: Activity, color: "text-blue-500", bg: "bg-blue-100" },
   { id: "Fungsi Komposisi & Invers", title: "Fungsi Komposisi", icon: Target, color: "text-rose-500", bg: "bg-rose-100" },
-  { id: "Matriks", title: "Matriks", icon: Shapes, color: "text-amber-500", bg: "bg-amber-100" },
-  { id: "Transformasi Geometri", title: "Transformasi", icon: Shapes, color: "text-emerald-500", bg: "bg-emerald-100" },
+  //{ id: "Matriks", title: "Matriks", icon: Shapes, color: "text-amber-500", bg: "bg-amber-100" },
+  //{ id: "Transformasi Geometri", title: "Transformasi", icon: Shapes, color: "text-emerald-500", bg: "bg-emerald-100" },
   { id: "Aritmatika Cepat", title: "Aritmatika Cepat", icon: Calculator, color: "text-purple-500", bg: "bg-purple-100" },
 ];
 
