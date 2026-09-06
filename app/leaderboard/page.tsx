@@ -7,11 +7,13 @@ import { useRouter } from "next/navigation";
 import { Trophy, ArrowLeft, Medal } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 import { motion } from "motion/react";
+import { getAvatarUrl } from "@/lib/avatars";
 
 interface LeaderboardUser {
   id: string;
   displayName: string;
   totalScore: number;
+  avatarSeed?: string;
 }
 
 export default function LeaderboardPage() {
@@ -69,6 +71,8 @@ export default function LeaderboardPage() {
               const avatarColors = ["bg-pink-500", "bg-green-500", "bg-blue-500", "bg-purple-500", "bg-orange-500"];
               const avatarBg = avatarColors[index % avatarColors.length];
               
+              const avatarUrl = getAvatarUrl(leader.avatarSeed || leader.id);
+              
               if (isCurrentUser) {
                 return (
                   <motion.div 
@@ -79,8 +83,9 @@ export default function LeaderboardPage() {
                     className="flex items-center gap-4 p-4 bg-blue-600 rounded-2xl border-2 border-blue-400 mt-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative z-10"
                   >
                     <span className="text-white font-black italic text-2xl w-8 text-center">{index + 1 < 10 ? `0${index+1}` : index+1}</span>
-                    <div className="w-12 h-12 bg-white rounded-xl border-2 border-white flex items-center justify-center text-blue-600 font-black text-xl">
-                      {leader.displayName?.[0]?.toUpperCase() || 'A'}
+                    <div className="w-12 h-12 bg-white rounded-xl border-2 border-white flex items-center justify-center overflow-hidden p-1">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={avatarUrl} alt="Avatar" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-black uppercase text-white truncate">KAMU</p>
@@ -104,8 +109,9 @@ export default function LeaderboardPage() {
                   className={`flex items-center gap-4 p-4 bg-zinc-900 rounded-2xl border-2 border-zinc-800 ${index > 2 ? 'opacity-80' : ''}`}
                 >
                   <span className={`${rankColor} font-black italic text-2xl w-8 text-center`}>{index + 1 < 10 ? `0${index+1}` : index+1}</span>
-                  <div className={`w-12 h-12 ${avatarBg} rounded-xl border-2 border-zinc-800 flex items-center justify-center text-white font-black text-xl`}>
-                    {leader.displayName?.[0]?.toUpperCase() || 'A'}
+                  <div className={`w-12 h-12 ${avatarBg} rounded-xl border-2 border-zinc-800 flex items-center justify-center overflow-hidden p-1`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-contain" />
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-black uppercase text-white truncate">

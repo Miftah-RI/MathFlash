@@ -30,7 +30,7 @@ interface Question {
 export default function QuizPage({ params }: { params: Promise<{ topic: string }> }) {
   const resolvedParams = use(params);
   const decodedTopic = decodeURIComponent(resolvedParams.topic);
-  const { user, score } = useAuth();
+  const { user, score, userProfile } = useAuth();
   const router = useRouter();
 
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -46,38 +46,15 @@ export default function QuizPage({ params }: { params: Promise<{ topic: string }
   const currentIndexRef = useRef(0);
   const scoreRef = useRef(0);
 
-  useEffect(() => {
-    // Ambil bank soal sesuai topik yang dipilih, jika tidak ada gunakan array kosong
-    const topicQuestions = questionBanks[decodedTopic] || [];
-    // Acak urutan soal dan ambil 15 soal pertama
-    const shuffled = [...topicQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
-    setQuestions(shuffled);
-  }, [decodedTopic]);
-
-  useEffect(() => {
-    if (isFinished || isAnimating || questions.length === 0) return;
-
-    if (timeLeft === 0) {
-      handleTimeOut();
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, isFinished, isAnimating, questions]);
-
-  const handleTimeOut = () => {
+  function handleTimeOut() {
     setAnswerStatus("wrong");
     setIsAnimating(true);
     setTimeout(() => {
       nextQuestion();
     }, 1000);
-  };
+  }
 
-  const handleAnswer = (option: string) => {
+  function handleAnswer(option: string) {
     if (isAnimating) return;
     
     setSelectedAnswer(option);
@@ -104,9 +81,9 @@ export default function QuizPage({ params }: { params: Promise<{ topic: string }
     setTimeout(() => {
       nextQuestion();
     }, 1200);
-  };
+  }
 
-  const nextQuestion = () => {
+  function nextQuestion() {
     const nextIdx = currentIndexRef.current + 1;
     if (nextIdx < questions.length) {
       currentIndexRef.current = nextIdx;
@@ -118,16 +95,36 @@ export default function QuizPage({ params }: { params: Promise<{ topic: string }
     } else {
       finishQuiz();
     }
-  };
+  }
 
-  const finishQuiz = async () => {
+  async function finishQuiz() {
     setIsFinished(true);
     setFinalTotalScore(score + scoreRef.current);
     
     if (user && scoreRef.current > 0) {
       const userRef = doc(db, "users", user.uid);
+      
+      const today = new Date();
+      // Format as YYYY-MM-DD
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+      
+      let newStreak = userProfile?.streak || 0;
+      if (userProfile?.lastActiveDate !== todayStr) {
+        if (userProfile?.lastActiveDate === yesterdayStr) {
+          newStreak += 1;
+        } else {
+          newStreak = 1;
+        }
+      }
+      
       await updateDoc(userRef, {
-        totalScore: increment(scoreRef.current)
+        totalScore: increment(scoreRef.current),
+        streak: newStreak,
+        lastActiveDate: todayStr
       });
     }
     confetti({
@@ -135,7 +132,37 @@ export default function QuizPage({ params }: { params: Promise<{ topic: string }
       spread: 100,
       origin: { y: 0.5 }
     });
-  };
+  }
+
+  useEffect(() => {
+    // Ambil bank soal sesuai topik yang dipilih, jika tidak ada gunakan array kosong
+    const topicQuestions = questionBanks[decodedTopic] || [];
+    // Acak urutan soal dan ambil 15 soal pertama
+    const shuffled = [...topicQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+    
+    const timeout = setTimeout(() => {
+      setQuestions(shuffled);
+    }, 0);
+    return () => clearTimeout(timeout);
+  }, [decodedTopic]);
+
+  useEffect(() => {
+    if (isFinished || isAnimating || questions.length === 0) return;
+
+    if (timeLeft === 0) {
+      setTimeout(() => {
+        handleTimeOut();
+      }, 0);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, isFinished, isAnimating, questions]);
 
   if (questions.length === 0) {
     return <div className="min-h-screen flex items-center justify-center font-bold text-slate-500">Memuat soal...</div>;
