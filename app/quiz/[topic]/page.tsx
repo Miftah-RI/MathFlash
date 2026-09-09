@@ -12,6 +12,8 @@ import trigonometriData from "@/data/trigonometri.json";
 import fungsiData from "@/data/fungsi.json";
 import aritmatikaData from "@/data/aritmatika.json";
 
+import { generateArithmeticQuestions } from "@/lib/arithmeticGenerator";
+
 // Petakan nama topik (yang ada di URL) ke file JSON yang sesuai
 const questionBanks: Record<string, any[]> = {
   "Trigonometri": trigonometriData,
@@ -135,13 +137,21 @@ export default function QuizPage({ params }: { params: Promise<{ topic: string }
   }
 
   useEffect(() => {
-    // Ambil bank soal sesuai topik yang dipilih, jika tidak ada gunakan array kosong
-    const topicQuestions = questionBanks[decodedTopic] || [];
-    // Acak urutan soal dan ambil 15 soal pertama
-    const shuffled = [...topicQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+    let finalQuestions: Question[] = [];
+    
+    if (decodedTopic === "Aritmatika Cepat") {
+      // Dynamic Generation: Generate infinite random questions on the fly
+      // 15 questions per session, just like the other quizzes
+      finalQuestions = generateArithmeticQuestions(15, decodedTopic);
+    } else {
+      // Ambil bank soal sesuai topik yang dipilih, jika tidak ada gunakan array kosong
+      const topicQuestions = questionBanks[decodedTopic] || [];
+      // Acak urutan soal dan ambil 15 soal pertama
+      finalQuestions = [...topicQuestions].sort(() => 0.5 - Math.random()).slice(0, 15);
+    }
     
     const timeout = setTimeout(() => {
-      setQuestions(shuffled);
+      setQuestions(finalQuestions);
     }, 0);
     return () => clearTimeout(timeout);
   }, [decodedTopic]);
